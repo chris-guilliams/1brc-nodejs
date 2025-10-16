@@ -21,10 +21,15 @@ for await (const line of lines) {
 
 function printCompiledResults(map: Map<string, number[]>): void {
     let output = "{"
-    for (const [key, value] of map.entries()) {
-        output += `${key}=${value}/${value}/${value}`
+    const entries = Array.from(map)
+    const sortedEntries = entries.sort((a, b) => a[0].localeCompare(b[0]))
+
+    for (const [key, value] of sortedEntries) {
+        const temp = value[0].toFixed(1)
+        output += `${key}=${temp}/${temp}/${temp}`
         output += ", "
     }
+
     output = output.substring(0, output.length - 2)
     output += "}"
     console.log(output);
