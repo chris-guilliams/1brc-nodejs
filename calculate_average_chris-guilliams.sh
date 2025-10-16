@@ -15,4 +15,5 @@
 #  limitations under the License.
 #
 
-time node src/main/nodejs/chris-guilliams/index.js measurements.txt
+(cd src/main/nodejs/chris-guilliams && npx tsc)
+time node src/main/nodejs/chris-guilliams/dist/index.js measurements.txt
