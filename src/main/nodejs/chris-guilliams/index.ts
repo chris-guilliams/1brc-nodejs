@@ -22,11 +22,23 @@ for await (const line of lines) {
 function printCompiledResults(map: Map<string, number[]>): void {
     let output = "{"
     const entries = Array.from(map)
-    const sortedEntries = entries.sort((a, b) => a[0].localeCompare(b[0]))
+    const sortedEntries = entries.sort((a, b) => {
+        if (a[0] < b[0]) {
+            return -1
+        } if (a[0] > b[0]) {
+            return 1
+        } else {
+            return 0
+        }
+    })
 
     for (const [key, value] of sortedEntries) {
         const temp = value[0].toFixed(1)
-        output += `${key}=${temp}/${temp}/${temp}`
+        const min = temp
+        const mean = temp
+        const max = temp
+
+        output += `${key}=${min}/${mean}/${max}`
         output += ", "
     }
 
