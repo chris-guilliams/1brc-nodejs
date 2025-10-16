@@ -1,24 +1,37 @@
 import * as fs from 'node:fs';
 
-const fileName = process.argv[2];
+// TODO: Convert to use chunks from stream
+// TODO: Find last index of delimiter "\n" in chunk
 
-const input = fs.readFileSync(fileName, 'utf8')
-const lines = input.trim().split("\n")
+function getMapFromLines(lines: string[]) {
+    const map = new Map<string, number[]>
 
-const map = new Map<string, number[]>
+    for (const line of lines) {
+        const [city, temperature] = line.split(";")
+        const temp: number = [temperature].map(Number)[0]
 
-for await (const line of lines) {
-    const [city, temperature] = line.split(";")
-    const temp: number = [temperature].map(Number)[0]
-
-    const entry = map.get(city)
-    if (entry) {
-        entry.push(temp)
-    } else {
-        map.set(city, [temp])
+        const entry = map.get(city)
+        if (entry) {
+            entry.push(temp)
+        } else {
+            map.set(city, [temp])
+        }
     }
+    return map;
 }
 
+function compileResults(): Map<string, number[]> {
+    const fileName = process.argv[2];
+    const input = fs.readFileSync(fileName, 'utf8')
+    const lines = input.trim().split("\n")
+
+    // const fd = await open(fileName)
+    // let chunkStart = 0
+    // let chunkEnd = 1024 * 1024 // 1MB
+    // const stream = fd.createReadStream({ start: chunkStart, end: chunkEnd })
+
+    return getMapFromLines(lines)
+}
 function printCompiledResults(map: Map<string, number[]>): void {
     let output = "{"
     const entries = Array.from(map)
@@ -50,4 +63,5 @@ function printCompiledResults(map: Map<string, number[]>): void {
     console.log(output);
 }
 
+const map = compileResults()
 printCompiledResults(map);
