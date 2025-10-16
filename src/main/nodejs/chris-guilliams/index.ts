@@ -34,9 +34,11 @@ function printCompiledResults(map: Map<string, number[]>): void {
 
     for (const [key, value] of sortedEntries) {
         const temp = value[0].toFixed(1)
-        const min = temp
-        const mean = temp
-        const max = temp
+        const sortedTemps = value.sort((a, b) => a - b)
+        const sum = sortedTemps.reduce((a, b) => a + b)
+        const min = sortedTemps[0].toFixed(1)
+        const mean = (sum / sortedTemps.length).toFixed(1)
+        const max = sortedTemps[sortedTemps.length - 1].toFixed(1)
 
         output += `${key}=${min}/${mean}/${max}`
         output += ", "
