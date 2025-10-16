@@ -22,6 +22,12 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+RESULT_DIR="test_results"
+mkdir -p "$RESULT_DIR"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+RESULT_FILE="$RESULT_DIR/test_run_$TIMESTAMP.txt"
+
+{ time (
 for sample in $(ls src/test/resources/samples/*.txt); do
   echo "Validating calculate_average_$1.sh -- $sample"
 
@@ -31,3 +37,4 @@ for sample in $(ls src/test/resources/samples/*.txt); do
   diff <("./calculate_average_$1.sh") ${sample%.txt}.out
 done
 rm measurements.txt
+); } 2>&1 | tee "$RESULT_FILE"
